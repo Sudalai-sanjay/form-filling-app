@@ -17,7 +17,7 @@ function App() {
 
 const submit = async () => {
   const res = await axios.post(
-    "https://form-filling-backend.onrender.com/submit",
+    "https://form-filling-app.onrender.com/submit",
     formData
   );
   setGeneratedId(res.data.id);
@@ -26,15 +26,13 @@ const submit = async () => {
 const retrieve = async () => {
   try {
     const res = await axios.get(
-      "https://form-filling-backend.onrender.com/retrieve/" + searchId
+      "https://form-filling-app.onrender.com/retrieve/" + searchId
     );
     setResult(res.data);
   } catch {
     setResult("ID not found");
   }
 };
-
-
   return (
     <div className="container">
       <div className="card">
