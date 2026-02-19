@@ -15,19 +15,25 @@ function App() {
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const submit = async () => {
-    const res = await axios.post("http://localhost:5000/submit", formData);
-    setGeneratedId(res.data.id);
-  };
+const submit = async () => {
+  const res = await axios.post(
+    "https://form-filling-backend.onrender.com/submit",
+    formData
+  );
+  setGeneratedId(res.data.id);
+};
 
-  const retrieve = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/retrieve/" + searchId);
-      setResult(res.data);
-    } catch {
-      setResult("ID not found");
-    }
-  };
+const retrieve = async () => {
+  try {
+    const res = await axios.get(
+      "https://form-filling-backend.onrender.com/retrieve/" + searchId
+    );
+    setResult(res.data);
+  } catch {
+    setResult("ID not found");
+  }
+};
+
 
   return (
     <div className="container">

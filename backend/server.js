@@ -1,13 +1,14 @@
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect("mongodb+srv://Sudalai:Sanjay@cluster0.bbpa5kd.mongodb.net/studentFormDB?retryWrites=true&w=majority")
+// Use environment variable
+mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB Connected"))
 .catch(err => console.log("❌ MongoDB Error:", err));
 
@@ -42,15 +43,25 @@ app.post("/submit", async (req, res) => {
     await form.save();
 
     res.json({ id: customId });
-  } catch {
+  } catch (err) {
     res.status(500).json({ message: "Error saving data" });
   }
 });
 
 app.get("/retrieve/:id", async (req, res) => {
-  const data = await Form.findOne({ customId: req.params.id });
-  if (!data) return res.status(404).json({ message: "ID not found" });
-  res.json(data);
+  try {
+    const data = await Form.findOne({ customId: req.params.id });
+    if (!data) return res.status(404).json({ message: "ID not found" });
+    res.json(data);
+  } catch {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+// Home route (optional but recommended)
+app.get("/", (req, res) => {
+  res.send("Student Form Backend Running 🚀");
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
